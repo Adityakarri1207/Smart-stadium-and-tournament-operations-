@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState, useEffect } from 'react';
 import { FiUsers, FiActivity, FiClock, FiAlertTriangle, FiCheckCircle, FiCpu, FiCalendar } from 'react-icons/fi';
+import { API_BASE_URL } from '../config/api';
 
 import { useStadium } from '../contexts/StadiumContext';
 
@@ -20,7 +21,7 @@ interface DashboardData {
 
 const fetchDashboardData = async (stadiumId: string | null): Promise<{ data: DashboardData }> => {
   if (!stadiumId) throw new Error('No stadium selected');
-  const res = await fetch(`http://localhost:3001/api/dashboard?stadiumId=${stadiumId}`);
+  const res = await fetch(`${API_BASE_URL}/api/dashboard?stadiumId=${stadiumId}`);
   if (!res.ok) throw new Error('Failed to fetch dashboard data');
   return res.json();
 };
@@ -50,7 +51,7 @@ export const Dashboard = () => {
 
   const handleResolveIncident = async (id: string) => {
     try {
-      const response = await fetch('http://localhost:3001/api/incident/resolve', {
+      const response = await fetch(`${API_BASE_URL}/api/incident/resolve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -99,7 +100,7 @@ export const Dashboard = () => {
     setReportSuccess('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/incident', {
+      const response = await fetch(`${API_BASE_URL}/api/incident`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

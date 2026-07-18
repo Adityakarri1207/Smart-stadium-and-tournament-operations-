@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { API_BASE_URL } from '../config/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { FiMap, FiClock, FiUsers, FiCoffee, FiPlusSquare, FiShoppingBag, FiInfo, FiAlertCircle, FiFilter, FiCpu } from 'react-icons/fi';
@@ -26,7 +27,7 @@ interface Zone {
 
 const fetchStadiumData = async (stadiumId: string | null) => {
   if (!stadiumId) throw new Error('No stadium selected');
-  const res = await fetch(`http://localhost:3001/api/stadium?stadiumId=${stadiumId}`);
+  const res = await fetch(`${API_BASE_URL}/api/stadium?stadiumId=${stadiumId}`);
   if (!res.ok) throw new Error('Network response was not ok');
   return res.json();
 };
@@ -266,7 +267,7 @@ export const Maps = () => {
     setReportSuccessMsg('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/incident', {
+      const response = await fetch(`${API_BASE_URL}/api/incident`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

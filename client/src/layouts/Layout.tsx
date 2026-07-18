@@ -1,4 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import { useQuery } from '@tanstack/react-query';
 import { FiHome, FiMessageSquare, FiGrid, FiMap, FiGlobe, FiLogOut, FiSettings, FiUser, FiCheck, FiTrendingUp } from 'react-icons/fi';
 import { useStadium } from '../contexts/StadiumContext';
@@ -7,7 +8,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Dropdown } from '../components/Dropdown';
 
 const fetchHierarchy = async () => {
-  const res = await fetch('http://localhost:3001/api/hierarchy');
+  const res = await fetch(`${API_BASE_URL}/api/hierarchy`);
   if (!res.ok) throw new Error('Failed to load hierarchy');
   return res.json();
 };

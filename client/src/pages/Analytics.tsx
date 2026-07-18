@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { API_BASE_URL } from '../config/api';
 import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FiPieChart, FiBarChart2, FiActivity, FiAlertOctagon, FiCpu, FiTrendingUp } from 'react-icons/fi';
@@ -21,7 +22,7 @@ interface DashboardData {
 
 const fetchDashboardData = async (stadiumId: string | null): Promise<{ data: DashboardData }> => {
   if (!stadiumId) throw new Error('No stadium selected');
-  const res = await fetch(`http://localhost:3001/api/dashboard?stadiumId=${stadiumId}`);
+  const res = await fetch(`${API_BASE_URL}/api/dashboard?stadiumId=${stadiumId}`);
   if (!res.ok) throw new Error('Failed to fetch dashboard data');
   return res.json();
 };

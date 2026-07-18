@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api';
 import { FiSend, FiCpu, FiUser, FiVolume2, FiMic, FiMicOff } from 'react-icons/fi';
 import { useStadium } from '../contexts/StadiumContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -101,7 +102,7 @@ export const Assistant = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
