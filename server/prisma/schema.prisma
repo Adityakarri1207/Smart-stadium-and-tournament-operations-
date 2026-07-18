@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Country {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  code     String    @unique // e.g., USA, MEX, CAN
+  cities   City[]
+}
+
+model City {
+  id        String    @id @default(uuid())
+  name      String
+  countryId String
+  country   Country   @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  stadiums  Stadium[]
+}
+
+model Stadium {
+  id          String    @id @default(uuid())
+  name        String
+  capacity    Int
+  cityId      String
+  city        City      @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  zones       Zone[]
+  events      Event[]
+}
+
+model User {
+  id                    String   @id @default(uuid())
+  name                  String
+  preferredLanguage     String   @default("en")
+  accessibilityPreference String?
+  ticketSection         String?
+  seatNumber            String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Zone {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  density     String   @default("LOW") // LOW, MEDIUM, HIGH, CRITICAL
+  riskLevel   String   @default("NORMAL") // NORMAL, ELEVATED, SEVERE
+  waitingTime Int      @default(0) // in minutes
+  stadiumId   String
+  stadium     Stadium  @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  facilities  Facility[]
+  incidents   Incident[]
+}
+
+model Facility {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // RESTROOM, MEDICAL, FOOD, CHARGING, MERCHANDISE, PRAYER, BABY_CARE
+  location    String
+  zoneId      String
+  zone        Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  isOpen      Boolean  @default(true)
+  waitingTime Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  type        String   // KICKOFF, HALF_TIME, GATE_OPENING, TRANSPORTATION, EMERGENCY
+  description String
+  time        DateTime
+  isEmergency Boolean  @default(false)
+  stadiumId   String
+  stadium     Stadium  @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Incident {
+  id          String   @id @default(uuid())
+  type        String   // MEDICAL, SAFETY, SPILL, MAINTENANCE
+  description String
+  status      String   @default("OPEN") // OPEN, RESOLVED
+  zoneId      String
+  zone        Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
